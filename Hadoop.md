@@ -235,7 +235,7 @@ SecondaryNameNode(当NameNode挂掉,并不能马上顶上)
 
 ## NameNode和SecondaryNameNode
 
-### 2NN工作机制
+
 
 #### 文件系统的持久化
 
@@ -243,7 +243,41 @@ SecondaryNameNode(当NameNode挂掉,并不能马上顶上)
 
 并且, NameNode在内存中保存了全部文件系统命名空间和块映射. 并且由于元数据被设计的十分的紧凑,一个4G的内存就已经可以保存很多的文件和目录了.每次NameNode节点开始运行, 它都会去读取硬盘上的FsImage和EditLog文件. 并且将所有的在EditLog中的事务写入到FsImage中.并且重新疆FsImage写入硬盘. 他会废弃老的EditLog文件,因为这个文件已经持久化到FsImage文件中了.这个过程就叫做checkpoint
 
+### 2NN工作机制
 
+  首先,元数据应该存放在内存中, 因为需要高速的响应客户请求和随机访问. 但是存在内存中带来的问题就是会产生断电元数据丢失, 因此需要在磁盘中备份元数据,就产生了FsImage.
 
-  首先,元数据应该存放在内存中, 因为需要高速的响应客户请求和随机访问. 但是存在内存中带来的问题就是会产生断电元数据丢失, 因此需要在磁盘中备份元数据,就产生了FsImage. 
+ 但是这也也会产生新的问题,当内存中的元数据更新,如果此时立即更新FsImage,会导致效率很低,但是如果不更新就会产生一致性问题.因此EditLog孕运而生.EditsLog文件只进行追加操作,效率很高.每当元数据有更新或者添加新的数据时, 修改内存中的元数据并且追加到EditsLog中.这样一旦NameNode断电,也可以通过合并FsImage和Edits文件来恢复
 
+  当然,如果数据长时间添加到Edits中, 会导致Edits文件过大,因此, Edits需要定期和FsImage合并,这个操作由NameNode来做显然不合适,因此引入了一个新的节点, SecondaryNameNode来辅助NameNode做这件事,专门用于FsImage和Edits文件的合并
+
+### 工作流程
+
+#### 第一阶段
+
+1. 第一次启动NameNode格式化之后, Hadoop会创建FsImage文件和Edits文件, 如果不试试第一次启动, 那么就直接加载编辑日志和镜像文件到内存中.
+2. 客户端对元数据进行增删改请求.
+3. NameNode记录日志操作, 更新滚动日志
+4. NameNode在内存中对数据进行增删改
+
+#### 第二阶段
+
+1. SecondaryNameNode 询问NameNode是否需要 CheckPoint, 直接带回NameNode是否检查结果
+2. SecondaryNameNode 请求执行CheckPoint
+3. NameNode滚工正在写的Edits日志
+4. 将滚动前的编辑日志和镜像文件拷贝到SecondaryNameNode中
+5. SecondaryNameNode加载编辑日志和镜像文件到内存中,并合并
+6. 生成新的镜像文件fsimage.CheckPoint到NameNode
+7. NameNode将fsimage.checkpoint重新命名为fsimage
+
+### 工作机制详解
+
+Fsimage：NameNode内存中元数据序列化后形成的文件。
+
+Edits：记录客户端更新元数据信息的每一步操作（可通过Edits运算出元数据）。
+
+NameNode启动时，先滚动Edits并生成一个空的edits.inprogress，然后加载Edits和Fsimage到内存中，此时NameNode内存就持有最新的元数据信息。Client开始对NameNode发送元数据的增删改的请求，这些请求的操作首先会被记录到edits.inprogress中（查询元数据的操作不会被记录在Edits中，因为查询操作不会更改元数据信息），如果此时NameNode挂掉，重启后会从Edits中读取元数据的信息。然后，NameNode会在内存中执行元数据的增删改的操作。
+
+由于Edits中记录的操作会越来越多，Edits文件会越来越大，导致NameNode在启动加载Edits时会很慢，所以需要对Edits和Fsimage进行合并（所谓合并，就是将Edits和Fsimage加载到内存中，照着Edits中的操作一步步执行，最终形成新的Fsimage）。SecondaryNameNode的作用就是帮助NameNode进行Edits和Fsimage的合并工作。
+
+SecondaryNameNode首先会询问NameNode是否需要CheckPoint（触发CheckPoint需要满足两个条件中的任意一个，定时时间到和Edits中数据写满了）。直接带回NameNode是否检查结果。SecondaryNameNode执行CheckPoint操作，首先会让NameNode滚动Edits并生成一个空的edits.inprogress，滚动Edits的目的是给Edits打个标记，以后所有新的操作都写入edits.inprogress，其他未合并的Edits和Fsimage会拷贝到SecondaryNameNode的本地，然后将拷贝的Edits和Fsimage加载到内存中进行合并，生成fsimage.chkpoint，然后将fsimage.chkpoint拷贝给NameNode，重命名为Fsimage后替换掉原来的Fsimage。NameNode在启动时就只需要加载之前未合并的Edits和Fsimage即可，因为合并过的Edits中的元数据信息已经被记录在Fsimage中。
