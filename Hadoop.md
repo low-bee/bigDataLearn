@@ -224,3 +224,26 @@ SecondaryNameNode(当NameNode挂掉,并不能马上顶上)
 >
 > The current, default replica placement policy described here is a work in progress.
 
+
+
+### HDFS读数据流程
+
+1. 客户端通过Distributed FileSystem 向NameNode请求下载文件, NameNode通过查询原始数据, 找到块文件所在的DataNode地址
+2. 挑选一台DataNode(根据网络拓扑距离的就近原则, 然后随机挑选)服务器, 请求写入数据
+3. DataNode开始传输数据给客户端(从磁盘读取数据, 以Packet为单位做校验)
+4. 客户端以Packet为单位接收,先在本地缓存,然后写入目标
+
+## NameNode和SecondaryNameNode
+
+### 2NN工作机制
+
+#### 文件系统的持久化
+
+为了应对NameNode持久化问题, NameNode使用了一个叫做EditLog的事务日志来持久化每一次元数据记录的改变. 例如简单的改变副本配置数量等,这些改变都会被忠实的就在EditLog中,并且, EditLog存储在本地. 所有的命名空间包括blocks的映射和文件系统的配置都存储在FsImage文件中. 并且FsImage也作为一个文件存储在本地文件系统中.
+
+并且, NameNode在内存中保存了全部文件系统命名空间和块映射. 并且由于元数据被设计的十分的紧凑,一个4G的内存就已经可以保存很多的文件和目录了.每次NameNode节点开始运行, 它都会去读取硬盘上的FsImage和EditLog文件. 并且将所有的在EditLog中的事务写入到FsImage中.并且重新疆FsImage写入硬盘. 他会废弃老的EditLog文件,因为这个文件已经持久化到FsImage文件中了.这个过程就叫做checkpoint
+
+
+
+  首先,元数据应该存放在内存中, 因为需要高速的响应客户请求和随机访问. 但是存在内存中带来的问题就是会产生断电元数据丢失, 因此需要在磁盘中备份元数据,就产生了FsImage. 
+
