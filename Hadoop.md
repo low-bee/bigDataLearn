@@ -306,3 +306,25 @@ SecondaryNameNode首先会询问NameNode是否需要CheckPoint（触发CheckPoin
   * Checkpoint node:
   * Backup node:
 
+#### web 接口
+
+* 地址: http://namenode-name:50070/
+* NameNode和DataNode都有的运行在网络上用以展示集群的基本信息.
+
+#### shell命令
+
+Hadoop支持和其他的文件系统类似的shell命令.使用 `bin/hdfs dfs -help`获取命令帮助, 使用`bin/hdfs dfs -heml command-name`显示命令的细节. 命令支持绝大多数文件系统的命令, 类似于复制文件,改变文件的权限等操作.也支持一些HDFS特有的如改变副本等操作.
+
+##### DFS管理员命令
+
+`bin/hdfs dfsadmin` 支持几个HDFS管理员命令, 如
+
+* -report: 报告HDFS的基本状态, 这些信息也可以在web页面中看到
+* -safemode: 尽管通常不需要,  但是这个管理员命令能使HDFS进入或着离开安全模式
+* -finalizeUpgrade:  删除上次更新的时候集群所做的备份
+* -refreshNodes: 更新两个文件中的可连接列表, 包括dfs.hosts和dfs.hdfs.exclude中的文件, 其中, 在 dfs.hosts中更新的文件相当于白名单,只有包含在这个名单中的DataNode才可以连接,而dfs.hdfs.exclude相当于黑名单, 在此名单之中的DataNode都不能连接. 黑名单常常被用来退役(decommissioned)一个节点.当需要退役的DataNode把它的副本全部复制到别的DataNode之后, 当前DataNode就会退役, 退役之后对当前集群就默认关闭了,不会再写入新的副本
+* -printTopoligy: 输出集群的拓扑结构. 通过NameNode展示一个树形的机架和DataNode附属结构
+
+### CheckPoint Node
+
+NameNode 持久化数据通过两个文件, 分别是FsImage(保存着最新的checkpoint)和Edits
