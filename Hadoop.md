@@ -281,3 +281,28 @@ NameNode启动时，先滚动Edits并生成一个空的edits.inprogress，然后
 由于Edits中记录的操作会越来越多，Edits文件会越来越大，导致NameNode在启动加载Edits时会很慢，所以需要对Edits和Fsimage进行合并（所谓合并，就是将Edits和Fsimage加载到内存中，照着Edits中的操作一步步执行，最终形成新的Fsimage）。SecondaryNameNode的作用就是帮助NameNode进行Edits和Fsimage的合并工作。
 
 SecondaryNameNode首先会询问NameNode是否需要CheckPoint（触发CheckPoint需要满足两个条件中的任意一个，定时时间到和Edits中数据写满了）。直接带回NameNode是否检查结果。SecondaryNameNode执行CheckPoint操作，首先会让NameNode滚动Edits并生成一个空的edits.inprogress，滚动Edits的目的是给Edits打个标记，以后所有新的操作都写入edits.inprogress，其他未合并的Edits和Fsimage会拷贝到SecondaryNameNode的本地，然后将拷贝的Edits和Fsimage加载到内存中进行合并，生成fsimage.chkpoint，然后将fsimage.chkpoint拷贝给NameNode，重命名为Fsimage后替换掉原来的Fsimage。NameNode在启动时就只需要加载之前未合并的Edits和Fsimage即可，因为合并过的Edits中的元数据信息已经被记录在Fsimage中。
+
+
+
+### HDFS保证安全的一些机制
+
+每个DataNode都会定期的向NameNode发送一个 Heartbeat 信息,因此,断开网络将导致NameNode不能收到这个信息而判断DataNode节点死亡. 一旦一个DataNode节点被NameNode判断为死亡, 那么DataNode将不会再收到数据的IO操作. 并且NameNode会定义的追踪那些文本需要备份,这种需要备份的原因可能是多方面的,例如DataNode变为不可用或者一个备份崩溃了再或者在DataNode的硬盘无法被访问了等等...
+
+### Hadoop一些好的特性
+
+* hadoop和HDFS都是分布式的应用,他们都能使用商业硬件进行分布式处理. 
+* Hadoop原生配置已经能够满足大多数集群的需要,.绝大多少时候,只需要对那些超大型的集群进行配置即可
+* 使用Java写的Hadoop支持绝大部分的主流平台
+* hadoop支持像shell一样的交互式环境直接操作HDFS
+* NameNode和DataNode都有对应的web页面,这能很方便的去查看当前集群的运行状态
+  * 文件权限和鉴定
+  * Rack awareness: 在物理调度和分配存储时能考虑到一个节点的物理位置
+  * Safemode
+  * fsck: 一个用来诊断文件健康状况的实用程序,用来发现丢失的文件或者块信息
+  * fetchdt: 获取DelegationToken并且将其存储在本地文件系统中的一个应用程序
+  * Balancer: 平衡数据当数据在集群中不平衡时
+  * Upgrade and rollback:
+  * Secondary NameNode
+  * Checkpoint node:
+  * Backup node:
+
