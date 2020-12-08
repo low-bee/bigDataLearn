@@ -1,4 +1,4 @@
-# shadoop文档
+# hadoop文档
 
 ## 集群配置
 
