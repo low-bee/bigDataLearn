@@ -328,3 +328,18 @@ Hadoop支持和其他的文件系统类似的shell命令.使用 `bin/hdfs dfs -h
 ### CheckPoint Node
 
 NameNode 持久化数据通过两个文件, 分别是FsImage(保存着最新的checkpoint)和Edits
+
+### DataNode工作机制
+
+1. 一个数据块在DataNode上以文件的形式存储在 磁盘上, 包括两个文件, 一个是数据本身, 一个是元数据包含的数据块的长度, 块数据, 校验和, 以及时间戳
+2. DataNode 启动之后向NameNode进行注册, 通过后, 周期性(1小时)的向NameNode上报所有的块信息
+3. 心跳是每3秒一次, 心跳返回结果带有NameNode给该DataNode的命令, 例如复制块数据到另外一台机器等.如果超过10分钟没有收到来自DataNode的心跳,则认为该DataNode不可用
+4. 集群运行中可以安全的加入和退出机器(配置黑名单和白名单)
+
+### 数据的完整性
+
+为了保证数据的完整性
+
+1. 当DataNode读取Block时会计算checkSum
+2. 如果计算之后的CheckSum和创建Block时不一样, 那么就认为文件已经损坏了, 此时会去寻找其他的DataNode上的Block
+3. DataNode在其文件创建后周期性验证CheckSum,
