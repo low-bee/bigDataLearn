@@ -1,4 +1,4 @@
-# hadoop文档
+# shadoop文档
 
 ## 集群配置
 
@@ -300,7 +300,77 @@ export HADOOP_NAMENODE_OPTS="-XX:+UseParallelGC"
 
 ### 配置hadoop进程参数
 
-选择性的处理接下来的配置文件, 
+几个核心配置
 
-太多了, 具体请看 [hadoop配置](https://hadoop.apache.org/docs/r2.10.1/hadoop-project-dist/hadoop-common/ClusterSetup.html#Configuring_the_Hadoop_Daemons)
 
+
+选择性的处理接下来的配置文件
+
+几个核心文件中的配置
+
+可以去[Hadoop configuration](https://hadoop.apache.org/docs/r2.10.1/hadoop-project-dist/hadoop-common/ClusterSetup.html#Configuring_the_Hadoop_Daemons)查看配置
+
+* `etc/hadoop/core-site.xml`
+
+  * fs.defaultFS: 是NameNode 的URI, 访问这个节点就可以访问到集群中的NameNode
+  * io.file.buffer.size: 设置序列文件中的读或者写的文件的大小, 默认是131024(16md)
+
+* `etc/hadoop/hdfs-site.xml`
+
+  Configurations for NameNode:
+
+  * dfs.namenode.name.dir: NameNode存储被保存在在本地文件系统的命名空间和事务日志的本地文件目录, 如果是一个逗号隔开的列表, 为了冗余, 会保存多个副本
+  * dfs.hosts` / `dfs.hosts.exclude: 有必要的话, 使用这两个文件来控制哪些DataNode能连上集群
+  * dfs.blocksize: 默认值是256mb为一个block
+  * dfs.namenode.handler.count:  配置处理NameNode服务的线程数
+
+  Configurations for DataNode:
+
+  * dfs.datanode.data.dir: 一个用来存储block的逗号分割的列表
+
+* `etc/hadoop/yarn-site.xml`
+
+  Configurations for ResourceManager and NodeManager:
+
+  * yarn.acl.enable: 配置ACL, 默认为flase
+  * yarn.admin.acl: ALC 用于设置集群的管理员, 默认是* 表示所有人都可以访问, 空格表示所有人都不可以访问
+  * yarn.log-aggregation-enable: 配置是否启用日志聚合
+
+  Configurations for ResourceManager:
+
+  * yarn.resourcemanager.address: `ResourceManager` host:port for clients to submit jobs.
+  * yarn.resourcemanager.scheduler.address
+  * ......
+
+  ### 使用NodeManagers监控健康状态
+
+  管理人员可以通过Hadoop提供的监控机制周期行的来判断是否一个节点处于健康状态.
+
+  管理者能够通过任何的他们在这个脚本中看到的健康状态的表现来决定一个节点的状态. 如果这个脚本检测到节点处于不健康的状态, 它就必须输出一个ERROR到标准输出上. NodeManager定期的产生这个脚本并且产生输出.如果脚本的输出包含字符串ERROR.这种情况下, 这个节点将被上报为一个不健康的节点. 并且节点将会被ResourceManager列入黑名单. 没有任务会被这个节点执行. 尽管这样, NodeManager还是会继续运行脚本, 直到这个节点再次变为健康的节点, 它会被自动地移出黑名单之中. 节点的健康状况取决于脚本的输出结果, 如果一个节点被标记为不健康, 那么在ResourceManager的Web接口中对管理员可用. 健康的节点也会展示在这个web 接口中.
+
+  下面的参数被用来监控节点的健康状态
+
+| Parameter                                           | Value                               | Notes                                                 |
+| :-------------------------------------------------- | :---------------------------------- | :---------------------------------------------------- |
+| `yarn.nodemanager.health-checker.script.path`       | Node health script                  | Script to check for node’s health status.             |
+| `yarn.nodemanager.health-checker.script.opts`       | Node health script options          | Options for script to check for node’s health status. |
+| `yarn.nodemanager.health-checker.interval-ms`       | Node health script interval         | Time interval for running health script.              |
+| `yarn.nodemanager.health-checker.script.timeout-ms` | Node health script timeout interval | Timeout for health script execution.                  |
+
+当本地硬盘损坏了, 健康检查脚本不会报告抛出错误.NodeManager有能力可以周期性的检查本地硬盘 (specifically checks nodemanager-local-dirs and nodemanager-log-dirs). 当检查出损坏的数量到达设置的最小健康硬盘数, 此时所有的节点都会被标为不健康.
+
+
+
+### 集群的开启和关闭
+
+[hadoop](https://hadoop.apache.org/docs/r2.10.1/hadoop-project-dist/hadoop-common/ClusterSetup.html#Hadoop_Startup)的开启
+
+[hadoop](https://hadoop.apache.org/docs/r2.10.1/hadoop-project-dist/hadoop-common/ClusterSetup.html#Hadoop_Shutdown)的关闭
+
+### Web 接口
+
+NameNode: 默认端口 50070
+
+ResourceManager: 默认端口8088
+
+MapReduce JobHistory Server: 默认端口是19888
