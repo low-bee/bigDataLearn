@@ -343,3 +343,32 @@ NameNode 持久化数据通过两个文件, 分别是FsImage(保存着最新的c
 1. 当DataNode读取Block时会计算checkSum
 2. 如果计算之后的CheckSum和创建Block时不一样, 那么就认为文件已经损坏了, 此时会去寻找其他的DataNode上的Block
 3. DataNode在其文件创建后周期性验证CheckSum,
+
+## mapReduce
+
+### mapReduce 完整的工作流程
+
+1. 先进行切片, 再进行提交, 提交三个信息, 分别是切片信息, jar包信息, 配置信息等.
+2. YARN 调用 ResourceManager计算出MapTask的数量
+3. 默认读入一行数据, 返回给Mapper, 对一行转换成Str类型, 再写入到OutputColector中, 最后写出到环形缓冲区
+4. 缓冲区从左往右(索引)和从右往左(key, value)写入到内存中, 当写入量到达80%的时候, 将内存中的数据写入到磁盘中
+5. 分区第一次排序(快速排序), 合并第二次排序(归并排序)
+6. 将不同MapTask中不同分区文件合并到一起, 归并排序后执行用户自己的Reduce方法.
+
+### shuffle机制
+
+
+
+### combiner合并
+
+对MapTask局部的结果进行汇总, 起作用的结果在MapTask, 能减小IO量
+
+combiner默认不启用, combiner启用的前提是不影响业务的逻辑
+
+* 例如, Mapper					Reduce
+
+  ​	3 5 7 (3+5+7) / 3			(3+5+7+2+6) / 5 != (5+4) / 2
+
+  ​	2 6 (2+6) / 2
+
+* 并且combiner和Reducer的key类型要一样
