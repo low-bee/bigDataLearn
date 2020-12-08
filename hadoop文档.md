@@ -1,4 +1,4 @@
-# shadoop文档
+# hadoop文档
 
 ## 集群配置
 
@@ -374,3 +374,39 @@ NameNode: 默认端口 50070
 ResourceManager: 默认端口8088
 
 MapReduce JobHistory Server: 默认端口是19888
+
+
+
+## hadoop版本兼容性
+
+### 意图
+
+本文档意图捕获hadoop项目的兼容性问题. 不同版本的hadoop发行版影响着开发者, 下游项目,  和不胜枚举的用户. 对于每一种的兼容性问题:
+
+* 我们描述了对下游项目和用户的影响
+* 在适用的情况下, 指出当不兼容情况发生时的hadoop开发者策略
+
+### 不兼容类型
+
+#### Java API
+
+hadoop 接口和类被声明用以描述目标受众和稳定的能力为了去兼容之前发布的版本
+
+* InterfaceStability:描述那种类型的接口的改变是被允许的. 可能的值是`Stable`, `Evolving `和 `Deprecate`
+
+使用案例
+
+* public-Stable API兼容性要求确保用户程序和下游项目没有改变的继续工作
+* `LimitedPrivate-Stable API`兼容性要求允许更新发布在镜像上的私有组件
+* `Private-Stable API`兼容性要求滚动升级
+
+策略
+
+* `Public-Stable APIs` 必须至少在一个稳定的版本中被弃用然后才能在下一个版本中弃用它
+* `LimitedPrivate-Stable APIs`可以跨主要版本更改, 但是不允许在主要版本中更改
+* `Private-Stable APIs` 可以跨主要版本更改, 但是不允许在主要版本中更改
+* 没有被声明的类默认是`Private`. 类成员没有声明表示从上一个封闭的类中继承的
+* 从原始文件中生成的API需要滚动升级兼容, 可以看有线兼容部分得到更多的信息. api和有线通信的兼容性策略需要同时解决这个问题。
+
+#### 语义兼容性
+
