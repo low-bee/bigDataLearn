@@ -355,7 +355,7 @@ NameNode 持久化数据通过两个文件, 分别是FsImage(保存着最新的c
 5. 分区第一次排序(快速排序), 合并第二次排序(归并排序)
 6. 将不同MapTask中不同分区文件合并到一起, 归并排序后执行用户自己的Reduce方法.
 
-### shuffle机制
+### shuffle机制★★
 
 
 
@@ -371,4 +371,7 @@ combiner默认不启用, combiner启用的前提是不影响业务的逻辑
 
   ​	2 6 (2+6) / 2
 
-* 并且combiner和Reducer的key类型要一样
+* 并且combiner和Reducer的输入和输出的类型要一样, 不能有任何的改变!
+
+两次combiner过程一次出现在快排之后, 一次出现在第一次归并排序
+

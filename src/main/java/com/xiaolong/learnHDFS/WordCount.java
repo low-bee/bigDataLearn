@@ -27,6 +27,8 @@ public class WordCount {
         job.setOutputKeyClass(Text.class);
         job.setOutputValueClass(IntWritable.class);
 
+        job.setCombinerClass(MyReduce.class);
+
         // 将数据源加入程序
         FileOutputFormat.setOutputPath(job, new Path(args[1]));
         FileInputFormat.setInputPaths(job, new Path(args[0]));

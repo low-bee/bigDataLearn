@@ -15,7 +15,7 @@ public class MyMapper extends Mapper<LongWritable, Text, Text, IntWritable> {
     protected void map(LongWritable key, Text value, Context context) throws IOException, InterruptedException {
         String line = value.toString();
 
-        String[] words = line.split(" ");
+        String[] words = line.split("\t");
 
         for (String word : words) {
             this.text.set(word);
