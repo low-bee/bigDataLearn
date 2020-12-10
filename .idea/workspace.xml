@@ -11,17 +11,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ad50649e-5a18-48bc-8598-ad08233261d5" name="Default Changelist" comment="&quot;2020-12-08 将所有的代码提交上去&quot;">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/xiaolong/group/GroupComparator.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/xiaolong/group/OrderBean.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/xiaolong/group/OrderDriver.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/xiaolong/group/OrderMapper.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/xiaolong/group/OrderReducer.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/xiaolong/outputformat/MyFormatDriver.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/xiaolong/outputformat/MyOutputFormat.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/xiaolong/outputformat/MyRecordFormat.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Hadoop.md" beforeDir="false" afterPath="$PROJECT_DIR$/Hadoop.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/xiaolong/learnHDFS/MyMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/xiaolong/learnHDFS/MyMapper.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/xiaolong/learnHDFS/WordCount.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/xiaolong/learnHDFS/WordCount.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/xiaolong/learnHDFS/MyMapper.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/xiaolong/learnHDFS/MyMapper.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/xiaolong/learnHDFS/WordCount.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/xiaolong/learnHDFS/WordCount.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -84,7 +78,7 @@
     <property name="project.structure.side.proportion" value="0.37772194" />
     <property name="settings.editor.selected.configurable" value="MavenSettings" />
   </component>
-  <component name="RunManager" selected="Application.OrderDriver">
+  <component name="RunManager" selected="Application.MyFormatDriver">
     <configuration name="FlowDriver" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="com.xiaolong.flow.FlowDriver" />
       <module name="HadoopClirnt" />
@@ -92,6 +86,19 @@
       <extension name="coverage">
         <pattern>
           <option name="PATTERN" value="com.xiaolong.flow.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="MyFormatDriver" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.xiaolong.outputformat.MyFormatDriver" />
+      <module name="HadoopClirnt" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.xiaolong.outputformat.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
@@ -125,13 +132,6 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="TestComparable" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="TestComparable" />
-      <module name="HadoopClirnt" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <configuration name="WordCount" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="com.xiaolong.learnHDFS.WordCount" />
       <module name="HadoopClirnt" />
@@ -149,12 +149,13 @@
     <list>
       <item itemvalue="Application.WordCount" />
       <item itemvalue="Application.FlowDriver" />
-      <item itemvalue="Application.TestComparable" />
       <item itemvalue="Application.SortDriver" />
       <item itemvalue="Application.OrderDriver" />
+      <item itemvalue="Application.MyFormatDriver" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Application.MyFormatDriver" />
         <item itemvalue="Application.OrderDriver" />
         <item itemvalue="Application.WordCount" />
         <item itemvalue="Application.FlowDriver" />
@@ -189,7 +190,8 @@
       <workItem from="1607392515857" duration="3000" />
       <workItem from="1607431048261" duration="602000" />
       <workItem from="1607431998423" duration="1015000" />
-      <workItem from="1607433080122" duration="12651000" />
+      <workItem from="1607433080122" duration="13326000" />
+      <workItem from="1607524678115" duration="3393000" />
     </task>
     <task id="LOCAL-00001" summary="&quot;增加了集群配置的部分参数&quot;">
       <created>1607406806236</created>
@@ -261,11 +263,11 @@
     <state x="222" y="100" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1536.824/-1080.-851.1080.1920@0.0.1536.824" timestamp="1607433773901" />
     <state x="-1505" y="186" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1536.824/-1920.0.1920.1040@-1920.0.1920.1040" timestamp="1605631189858" />
     <state x="-1505" y="193" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1536.824/-1920.0.1920.1080@-1920.0.1920.1080" timestamp="1605713628749" />
-    <state x="612" y="178" key="#com.intellij.ide.util.MemberChooser" timestamp="1607443851973">
+    <state x="612" y="178" key="#com.intellij.ide.util.MemberChooser" timestamp="1607527800829">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state x="446" y="173" key="#com.intellij.ide.util.MemberChooser/0.0.1120.800@0.0.1120.800" timestamp="1605779426848" />
-    <state x="612" y="178" key="#com.intellij.ide.util.MemberChooser/0.0.1536.824/-1080.-851.1080.1920@0.0.1536.824" timestamp="1607443851973" />
+    <state x="612" y="178" key="#com.intellij.ide.util.MemberChooser/0.0.1536.824/-1080.-851.1080.1920@0.0.1536.824" timestamp="1607527800829" />
     <state x="-1155" y="225" key="#com.intellij.ide.util.MemberChooser/0.0.1536.824/-1920.0.1920.1040@-1920.0.1920.1040" timestamp="1605628941029" />
     <state x="-1155" y="233" key="#com.intellij.ide.util.MemberChooser/0.0.1536.824/-1920.0.1920.1080@-1920.0.1920.1080" timestamp="1605767307732" />
     <state x="612" y="178" key="#com.intellij.ide.util.MemberChooser/0.0.1536.824/-1920.0.1920.1080@0.0.1536.824" timestamp="1605697880437" />
@@ -292,61 +294,61 @@
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state x="579" y="331" key="Github.CreateGistDialog/0.0.1536.824/-1080.-843.1080.1920@0.0.1536.824" timestamp="1607170852034" />
-    <state width="1493" height="490" key="GridCell.Tab.0.bottom" timestamp="1607443963413">
+    <state width="1493" height="174" key="GridCell.Tab.0.bottom" timestamp="1607562080506">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state width="1077" height="579" key="GridCell.Tab.0.bottom/0.0.1120.800@0.0.1120.800" timestamp="1605783902479" />
     <state width="1493" height="336" key="GridCell.Tab.0.bottom/0.0.1536.824/-1080.-851.1080.1880@0.0.1536.824" timestamp="1605609994076" />
-    <state width="1493" height="490" key="GridCell.Tab.0.bottom/0.0.1536.824/-1080.-851.1080.1920@0.0.1536.824" timestamp="1607443963413" />
+    <state width="1493" height="174" key="GridCell.Tab.0.bottom/0.0.1536.824/-1080.-851.1080.1920@0.0.1536.824" timestamp="1607562080506" />
     <state width="1493" height="336" key="GridCell.Tab.0.bottom/0.0.1536.824/-1920.0.1920.1040@-1920.0.1920.1040" timestamp="1605631677089" />
     <state width="1877" height="767" key="GridCell.Tab.0.bottom/0.0.1536.824/-1920.0.1920.1080@-1920.0.1920.1080" timestamp="1605768492616" />
     <state width="1077" height="579" key="GridCell.Tab.0.bottom/0.0.1536.824@0.0.1536.824" timestamp="1605791943055" />
-    <state width="1493" height="490" key="GridCell.Tab.0.center" timestamp="1607443963413">
+    <state width="1493" height="174" key="GridCell.Tab.0.center" timestamp="1607562080506">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state width="1077" height="579" key="GridCell.Tab.0.center/0.0.1120.800@0.0.1120.800" timestamp="1605783902479" />
     <state width="1493" height="336" key="GridCell.Tab.0.center/0.0.1536.824/-1080.-851.1080.1880@0.0.1536.824" timestamp="1605609994076" />
-    <state width="1493" height="490" key="GridCell.Tab.0.center/0.0.1536.824/-1080.-851.1080.1920@0.0.1536.824" timestamp="1607443963413" />
+    <state width="1493" height="174" key="GridCell.Tab.0.center/0.0.1536.824/-1080.-851.1080.1920@0.0.1536.824" timestamp="1607562080506" />
     <state width="1493" height="336" key="GridCell.Tab.0.center/0.0.1536.824/-1920.0.1920.1040@-1920.0.1920.1040" timestamp="1605631677089" />
     <state width="1877" height="767" key="GridCell.Tab.0.center/0.0.1536.824/-1920.0.1920.1080@-1920.0.1920.1080" timestamp="1605768492616" />
     <state width="1077" height="579" key="GridCell.Tab.0.center/0.0.1536.824@0.0.1536.824" timestamp="1605791943055" />
-    <state width="1493" height="490" key="GridCell.Tab.0.left" timestamp="1607443963413">
+    <state width="1493" height="174" key="GridCell.Tab.0.left" timestamp="1607562080506">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state width="1077" height="579" key="GridCell.Tab.0.left/0.0.1120.800@0.0.1120.800" timestamp="1605783902479" />
     <state width="1493" height="336" key="GridCell.Tab.0.left/0.0.1536.824/-1080.-851.1080.1880@0.0.1536.824" timestamp="1605609994076" />
-    <state width="1493" height="490" key="GridCell.Tab.0.left/0.0.1536.824/-1080.-851.1080.1920@0.0.1536.824" timestamp="1607443963413" />
+    <state width="1493" height="174" key="GridCell.Tab.0.left/0.0.1536.824/-1080.-851.1080.1920@0.0.1536.824" timestamp="1607562080506" />
     <state width="1493" height="336" key="GridCell.Tab.0.left/0.0.1536.824/-1920.0.1920.1040@-1920.0.1920.1040" timestamp="1605631677089" />
     <state width="1877" height="767" key="GridCell.Tab.0.left/0.0.1536.824/-1920.0.1920.1080@-1920.0.1920.1080" timestamp="1605768492615" />
     <state width="1077" height="579" key="GridCell.Tab.0.left/0.0.1536.824@0.0.1536.824" timestamp="1605791943055" />
-    <state width="1493" height="490" key="GridCell.Tab.0.right" timestamp="1607443963413">
+    <state width="1493" height="174" key="GridCell.Tab.0.right" timestamp="1607562080506">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state width="1077" height="579" key="GridCell.Tab.0.right/0.0.1120.800@0.0.1120.800" timestamp="1605783902479" />
     <state width="1493" height="336" key="GridCell.Tab.0.right/0.0.1536.824/-1080.-851.1080.1880@0.0.1536.824" timestamp="1605609994076" />
-    <state width="1493" height="490" key="GridCell.Tab.0.right/0.0.1536.824/-1080.-851.1080.1920@0.0.1536.824" timestamp="1607443963413" />
+    <state width="1493" height="174" key="GridCell.Tab.0.right/0.0.1536.824/-1080.-851.1080.1920@0.0.1536.824" timestamp="1607562080506" />
     <state width="1493" height="336" key="GridCell.Tab.0.right/0.0.1536.824/-1920.0.1920.1040@-1920.0.1920.1040" timestamp="1605631677089" />
     <state width="1877" height="767" key="GridCell.Tab.0.right/0.0.1536.824/-1920.0.1920.1080@-1920.0.1920.1080" timestamp="1605768492616" />
     <state width="1077" height="579" key="GridCell.Tab.0.right/0.0.1536.824@0.0.1536.824" timestamp="1605791943055" />
-    <state width="1493" height="377" key="GridCell.Tab.1.bottom" timestamp="1607443800742">
+    <state width="1493" height="377" key="GridCell.Tab.1.bottom" timestamp="1607514575444">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1493" height="377" key="GridCell.Tab.1.bottom/0.0.1536.824/-1080.-851.1080.1920@0.0.1536.824" timestamp="1607443800742" />
+    <state width="1493" height="377" key="GridCell.Tab.1.bottom/0.0.1536.824/-1080.-851.1080.1920@0.0.1536.824" timestamp="1607514575444" />
     <state width="1877" height="538" key="GridCell.Tab.1.bottom/0.0.1536.824/-1920.0.1920.1080@-1920.0.1920.1080" timestamp="1605755688705" />
-    <state width="1493" height="377" key="GridCell.Tab.1.center" timestamp="1607443800742">
+    <state width="1493" height="377" key="GridCell.Tab.1.center" timestamp="1607514575443">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1493" height="377" key="GridCell.Tab.1.center/0.0.1536.824/-1080.-851.1080.1920@0.0.1536.824" timestamp="1607443800742" />
+    <state width="1493" height="377" key="GridCell.Tab.1.center/0.0.1536.824/-1080.-851.1080.1920@0.0.1536.824" timestamp="1607514575443" />
     <state width="1877" height="538" key="GridCell.Tab.1.center/0.0.1536.824/-1920.0.1920.1080@-1920.0.1920.1080" timestamp="1605755688705" />
-    <state width="1493" height="377" key="GridCell.Tab.1.left" timestamp="1607443800742">
+    <state width="1493" height="377" key="GridCell.Tab.1.left" timestamp="1607514575443">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1493" height="377" key="GridCell.Tab.1.left/0.0.1536.824/-1080.-851.1080.1920@0.0.1536.824" timestamp="1607443800742" />
+    <state width="1493" height="377" key="GridCell.Tab.1.left/0.0.1536.824/-1080.-851.1080.1920@0.0.1536.824" timestamp="1607514575443" />
     <state width="1877" height="538" key="GridCell.Tab.1.left/0.0.1536.824/-1920.0.1920.1080@-1920.0.1920.1080" timestamp="1605755688705" />
-    <state width="1493" height="377" key="GridCell.Tab.1.right" timestamp="1607443800742">
+    <state width="1493" height="377" key="GridCell.Tab.1.right" timestamp="1607514575444">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1493" height="377" key="GridCell.Tab.1.right/0.0.1536.824/-1080.-851.1080.1920@0.0.1536.824" timestamp="1607443800742" />
+    <state width="1493" height="377" key="GridCell.Tab.1.right/0.0.1536.824/-1080.-851.1080.1920@0.0.1536.824" timestamp="1607514575444" />
     <state width="1877" height="538" key="GridCell.Tab.1.right/0.0.1536.824/-1920.0.1920.1080@-1920.0.1920.1080" timestamp="1605755688705" />
     <state x="-1380" y="274" key="IDE.errors.dialog" timestamp="1605753309228">
       <screen x="-1920" y="0" width="1920" height="1080" />
